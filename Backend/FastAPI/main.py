@@ -1,18 +1,22 @@
 from fastapi import FastAPI
-from typing import Union
+from routers import products, users
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
+# Routers
+app.include_router(products.router)
+app.include_router(users.router)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def root():
+    return "Hola FastAPI!"
 
+# Url local: http://127.0.0.1:8000/url
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
 
 @app.get("/url")
-def read_root():
-    return { "url":"https://mouredev.com/python" }
+async def url():
+    return {"url": "https://mouredev.com/python"}
